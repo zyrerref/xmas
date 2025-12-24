@@ -500,3 +500,15 @@ h1{
 @media (min-width: 1024px){
   .choices{ grid-template-columns: repeat(3, 1fr); }
 }
+@media (max-width: 600px){
+  .peek-img{
+    width: 320px;          /* smaller so it fits */
+    left: -120px;          /* less negative so it stays visible */
+    top: 110px;            /* lower so it doesn't cover badge/title */
+    transform: rotate(-10deg);
+    opacity: 1;            /* ensure visible */
+  }
+}
+@media (max-width: 600px){
+  .peek-img{ opacity: 1; }
+}
