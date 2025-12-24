@@ -1,3 +1,14 @@
+const isTikTok = /TikTok/i.test(navigator.userAgent);
+
+if (isTikTok) {
+  document.addEventListener("DOMContentLoaded", () => {
+    const sub = document.getElementById("subtitle");
+    if (sub) {
+      sub.textContent = "🎄 TikTok sent you here. Open the gift, then pass it on.";
+    }
+  });
+}
+
 // ====== Helpers ======
 const $ = (id) => document.getElementById(id);
 
