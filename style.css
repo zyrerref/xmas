@@ -132,7 +132,7 @@ body{
   padding:80px 16px 40px;
   min-height:100%;
   display:flex;
-  align-items:flex-start;
+  align-items: center;
   justify-content:center;
 }
 
@@ -511,4 +511,48 @@ h1{
 }
 @media (max-width: 600px){
   .peek-img{ opacity: 1; }
+}
+/* 🔧 MOBILE FIX: stack containers vertically */
+@media (max-width: 768px){
+  .wrap{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero,
+  .panel{
+    width: 100%;
+    max-width: 100%;
+  }
+}
+@media (max-width: 768px){
+  .panel{
+    margin-top: 16px;
+  }
+}
+/* ✅ MOBILE: stack hero + panel (no side-by-side) */
+@media (max-width: 768px){
+  .wrap{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero,
+  .panel{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .panel{
+    margin-top: 16px;
+  }
+
+  /* ✅ MOBILE: make Jose Mari Chan visible (not off-screen) */
+  .peek-img{
+    width: 280px;        /* smaller so it fits */
+    left: -90px;         /* less negative so it shows */
+    top: 90px;           /* adjust so it doesn't cover badge */
+    transform: rotate(-10deg);
+    opacity: 1;
+  }
 }
