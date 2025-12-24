@@ -4,8 +4,7 @@ const $ = (id) => document.getElementById(id);
 const state = {
   name: "",
   musicOn: false,
-  audioCtx: null,
-  musicTimer: null
+  audioCtx: null
 };
 
 function safeName(raw) {
@@ -16,13 +15,13 @@ function safeName(raw) {
 
 function setText(el, text) { if (el) el.textContent = text; }
 
-// ====== Snow ======
+// ====== Snow (optimized to reduce lag) ======
 const canvas = $("snow");
 const ctx = canvas.getContext("2d");
-let W, H, flakes;
+let W = 0, H = 0, flakes = [];
 
 function resize() {
-  const dpr = Math.min(2, window.devicePixelRatio || 1); // cap to avoid 4K melting
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
   W = window.innerWidth;
   H = window.innerHeight;
 
@@ -30,18 +29,17 @@ function resize() {
   canvas.height = Math.floor(H * dpr);
   canvas.style.width = W + "px";
   canvas.style.height = H + "px";
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // draw using CSS pixels
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   const count = Math.min(120, Math.floor(W / 10));
   flakes = Array.from({ length: count }, () => ({
     x: Math.random() * W,
     y: Math.random() * H,
     r: 1 + Math.random() * 3.0,
-    v: 1.0 + Math.random() * 2.2,
+    v: 0.9 + Math.random() * 2.2,
     d: Math.random() * Math.PI * 2
   }));
 }
-
 window.addEventListener("resize", resize);
 resize();
 
@@ -50,19 +48,20 @@ function drawSnow() {
   ctx.globalAlpha = 0.85;
   ctx.fillStyle = "white";
 
+  ctx.beginPath();
   for (const f of flakes) {
     f.d += 0.01;
     f.y += f.v;
-    f.x += Math.sin(f.d) * 0.7;
+    f.x += Math.sin(f.d) * 0.6;
 
     if (f.y > H + 10) { f.y = -10; f.x = Math.random() * W; }
     if (f.x < -10) f.x = W + 10;
     if (f.x > W + 10) f.x = -10;
 
-    ctx.beginPath();
+    ctx.moveTo(f.x + f.r, f.y);
     ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-    ctx.fill();
   }
+  ctx.fill();
 
   requestAnimationFrame(drawSnow);
 }
@@ -84,7 +83,7 @@ function confettiBurst(count = 60) {
   }
 }
 
-// ====== WebAudio tiny SFX (optional) ======
+// ====== tiny SFX via WebAudio (optional; only when music enabled) ======
 function ensureAudio() {
   if (!state.audioCtx) {
     state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -120,9 +119,10 @@ function playSound(type) {
   }
 }
 
-// ====== REAL MP3 Music Toggle ======
+// ====== MP3 Music Toggle ======
 function toggleMusic() {
   const audio = document.getElementById("bgMusic");
+  const peekImg = document.querySelector(".peek-img");
   if (!audio) return;
 
   state.musicOn = !state.musicOn;
@@ -134,11 +134,20 @@ function toggleMusic() {
       alert("Tap Start first, then tap Music again.");
       state.musicOn = false;
       $("musicBtn").textContent = "🔊 Music";
+      return;
     });
+
+    /* 🎄 FADE IN IMAGE */
+    if (peekImg) peekImg.classList.add("show");
+
   } else {
     audio.pause();
+
+    /* OPTIONAL: fade OUT when music stops */
+    if (peekImg) peekImg.classList.remove("show");
   }
 }
+
 
 // ====== Personalized "from" on load ======
 const params = new URLSearchParams(window.location.search);
@@ -150,7 +159,7 @@ if (fromParam) {
   }
 }
 
-// ====== Share-first (Option 2) ======
+// ====== Share-first ======
 function buildShareUrl() {
   const base = `${location.origin}${location.pathname}`;
   const from = state.name ? state.name : "a friend";
@@ -181,10 +190,10 @@ function openMessenger() {
   }
 }
 
-// ====== Progress bar (you used it but didn’t define it) ======
+// ====== Progress bar ======
 let progress = 0;
 function updateProgress(step) {
-  progress = Math.max(progress, step); // don’t go backwards
+  progress = Math.max(progress, step);
   const fill = $("progressFill");
   const text = $("progressText");
 
@@ -193,7 +202,7 @@ function updateProgress(step) {
 
   if (progress >= 2) {
     playSound("success");
-    confettiBurst(80);
+    confettiBurst(70);
     const who = state.name ? state.name : "friend";
     setText($("result"), `Nice, ${who}. Now pass the gift — don’t keep it to yourself.`);
     setText($("shareHint"), "Messenger works best on phone. Copy link for FB posts.");
@@ -223,11 +232,11 @@ Now do 2 things:
 
   setText($("title"), "🎅 Christmas mode: ON");
   setText($("subtitle"), "Click around. It reacts. Don’t just scroll like a zombie.");
-  confettiBurst(30);
+  confettiBurst(25);
 }
 
 function sparkle() {
-  confettiBurst(90);
+  confettiBurst(70);
   const card = document.querySelector(".card");
   card.animate(
     [{ transform: "translateX(0)" }, { transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "translateX(0)" }],
@@ -240,7 +249,7 @@ function openGift() {
 
   const gift = $("gift");
   gift.classList.add("open");
-  confettiBurst(120);
+  confettiBurst(70);
 
   $("reveal").hidden = false;
   $("progressBar").hidden = false;
@@ -254,11 +263,10 @@ function openGift() {
 
 function handleChoice(btn) {
   playSound("click");
-  confettiBurst(60);
+  confettiBurst(50);
   btn.disabled = true;
   btn.style.opacity = "0.75";
   btn.style.borderColor = "rgba(34,197,94,.55)";
-
   updateProgress(2);
 }
 
@@ -276,7 +284,7 @@ function restart() {
   $("gift").classList.remove("open");
   $("nameInput").value = "";
 
-  setText($("title"), "Tap the magic.");
+  setText($("title"), "Press Start for your surprise 🎁");
   if (!fromParam) {
     setText($("subtitle"), "This is a tiny Christmas surprise for anyone. Enter your name so it feels personal.");
   }

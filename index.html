@@ -6,6 +6,7 @@
     <title>🎄 A Christmas Surprise</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <!-- Snow canvas -->
     <canvas id="snow" aria-hidden="true"></canvas>
@@ -22,9 +23,18 @@
     <main class="wrap">
       <header class="hero">
         <div class="badge">🎁 Christmas Link</div>
+
+        <!-- PEEK IMAGE INSIDE MAIN FRAME -->
+        <img
+          src="chan-peek-noBG.png"
+          alt="Christmas surprise character"
+          class="peek-img"
+          aria-hidden="true"
+        />
+
         <h1 class="christmas-heading">Merry Christmas to you! 🎄</h1>
 
-        <h1 id="title">Tap the magic.</h1>
+        <h1 id="title">Press Start for your surprise 🎁</h1>
         <p class="sub" id="subtitle">
           This is a tiny Christmas surprise for anyone. Enter your name so it
           feels personal.
@@ -38,11 +48,13 @@
             placeholder="Your name (optional)"
           />
           <button id="startBtn" class="btn primary">Start</button>
-          <button id="musicBtn" class="btn" title="Toggle music">🔊 Music</button>
+          <button id="musicBtn" class="btn" title="Toggle music">
+            🔊 Music
+          </button>
         </div>
 
         <div class="tiny">
-          
+          Tip: Works best on mobile too. No account needed. Just vibes.
         </div>
       </header>
 
@@ -52,7 +64,9 @@
           <p id="message" class="message"></p>
 
           <div class="actions">
-            <button id="giftBtn" class="btn primary big">🎁 Open the Gift</button>
+            <button id="giftBtn" class="btn primary big">
+              🎁 Open the Gift
+            </button>
             <button id="sparkBtn" class="btn big">✨ Make it Sparkle</button>
           </div>
 
@@ -66,28 +80,41 @@
             <div class="reveal" id="reveal" hidden>
               <div class="progress-bar" id="progressBar" hidden>
                 <div class="progress-fill" id="progressFill"></div>
-                <span class="progress-text" id="progressText">0/2 Complete</span>
+                <span class="progress-text" id="progressText"
+                  >0/2 Complete</span
+                >
               </div>
 
               <h3>🎅 Your Christmas Challenge</h3>
               <p class="small">Pick one. Don’t overthink it. Just commit. 😄</p>
 
               <div class="choices">
-                <button class="choice" data-choice="1">Be kind to 1 person today</button>
-                <button class="choice" data-choice="2">Message someone you miss</button>
-                <button class="choice" data-choice="3">Take a selfie smile (no filter)</button>
-                <button class="choice" data-choice="4">Drink water, yes now</button>
+                <button class="choice" data-choice="1">
+                  Be kind to 1 person today
+                </button>
+                <button class="choice" data-choice="2">
+                  Message someone you miss
+                </button>
+                <button class="choice" data-choice="3">
+                  Take a selfie smile (no filter)
+                </button>
+                <button class="choice" data-choice="4">
+                  Drink water, yes now
+                </button>
               </div>
 
               <!-- SHARE-FIRST (Option 2) -->
               <div class="shareBox">
                 <h4>📩 Pass the gift to someone</h4>
                 <p class="small" id="result">
-                  Don’t keep it to yourself. Send it to 1 person who needs a little Christmas energy.
+                  Don’t keep it to yourself. Send it to 1 person who needs a
+                  little Christmas energy.
                 </p>
 
                 <div class="final">
-                  <button id="messengerBtn" class="btn primary">💬 Send on Messenger</button>
+                  <button id="messengerBtn" class="btn primary">
+                    💬 Send on Messenger
+                  </button>
                   <button id="copyBtn" class="btn">📋 Copy Link</button>
                   <button id="restartBtn" class="btn">🔁 Replay</button>
                 </div>
