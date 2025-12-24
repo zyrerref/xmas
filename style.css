@@ -358,15 +358,6 @@ h1{
   gap:10px;
   margin:14px 0 16px;
 }
-.shareBox{
-  margin:10px 0 6px;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
-  text-align:left;
-}
-
 .choice{
   padding:12px 14px;
   border-radius:14px;
@@ -469,7 +460,4 @@ h1{
 @media (min-width: 1024px){
   .choices{ grid-template-columns: repeat(3, 1fr); }
 }
-.shareBox h4 { margin: 0 0 6px; }
-.shareBox .final { margin-top: 10px; }
-.shareBox .btn { flex: 1 1 auto; }
 

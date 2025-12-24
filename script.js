@@ -22,16 +22,26 @@ const ctx = canvas.getContext("2d");
 let W, H, flakes;
 
 function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-  flakes = Array.from({ length: Math.min(180, Math.floor(W / 6)) }, () => ({
+  const dpr = Math.min(2, window.devicePixelRatio || 1); // cap to avoid 4K melting
+  W = window.innerWidth;
+  H = window.innerHeight;
+
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // draw using CSS pixels
+
+  const count = Math.min(120, Math.floor(W / 10));
+  flakes = Array.from({ length: count }, () => ({
     x: Math.random() * W,
     y: Math.random() * H,
-    r: 1 + Math.random() * 3.2,
-    v: 0.4 + Math.random() * 1.6,
+    r: 1 + Math.random() * 3.0,
+    v: 1.0 + Math.random() * 2.2,
     d: Math.random() * Math.PI * 2
   }));
 }
+
 window.addEventListener("resize", resize);
 resize();
 
@@ -282,12 +292,6 @@ $("gift").addEventListener("click", openGift);
 document.querySelectorAll(".choice").forEach(btn => {
   btn.addEventListener("click", () => handleChoice(btn));
 });
-document.querySelector(".hero").addEventListener("click", (e) => {
-  // Don’t trigger if they clicked the input or buttons
-  if (e.target.closest("button") || e.target.closest("input")) return;
-  start();
-});
-
 
 $("messengerBtn").addEventListener("click", openMessenger);
 $("copyBtn").addEventListener("click", copyLink);
